@@ -22,17 +22,7 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 
 		// log.info("Application has changed");
+
 	}
-
-	@Bean
-	CommandLineRunner runner () {
-		return args -> {
-			Run run = new Run(1, "first run", LocalDateTime.now(),
-					LocalDateTime.now().plus(1, ChronoUnit.HOURS), 5, Location.OUTDOOR);
-
-					log.info("Run " + run);
-		};
-	}
-
 
 }

@@ -1,5 +1,6 @@
 package dev.danvega.runnerz.run;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,17 +23,33 @@ public class RunController {
         return runRepository.findAll();
     }
 
-    @GetMapping("/{Id}")
-    Run findById(@PathVariable Integer Id){
-        Optional<Run> run = runRepository.findById(Id);
+    @GetMapping("/{id}")
+    Run findById(@PathVariable Integer id){
+        Optional<Run> run = runRepository.findById(id);
 
         if (run.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new RunNotFoundException();
         }
         return run.get();
     }
 
-    void create(@RequestBody Run run){
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    void create(@Valid @RequestBody Run run){
+        System.out.println(run.id());
         runRepository.create(run);
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{id}")
+    void update (@RequestBody Run run, @PathVariable Integer id){
+        runRepository.update(run, id);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    void delete(@PathVariable Integer id){
+        runRepository.delete(id);
+    }
+
 }
